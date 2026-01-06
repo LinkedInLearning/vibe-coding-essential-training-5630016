@@ -1,5 +1,5 @@
-# COURSENAME
-This is the repository for the LinkedIn Learning course `course-name`. The full course is available from [LinkedIn Learning][lil-course-url].
+# Vibe Coding Essential Training: Learn to Code in the Age of AI
+This is the repository for the LinkedIn Learning course `Vibe Coding Essential Training: Learn to Code in the Age of AI`. The full course is available from [LinkedIn Learning][lil-course-url].
 
 ![lil-thumbnail-url]
 
