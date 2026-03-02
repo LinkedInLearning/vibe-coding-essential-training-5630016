@@ -1,0 +1,537 @@
+# Recipe Matcher MVP 
+
+## 1. Project Overview
+
+We're building an ingredient-first recipe matcher that answers one core question: "What can I cook right now?" Users sign up, build their pantry once, then instantly see recipes ranked by match quality—with recipes using the most of their ingredients appearing first. The magic happens through intelligent matching powered by our mock recipe database, with the front end focusing on delightful UX, pantry persistence, and clear visualization of what users have versus what they need. Success is measured by how quickly users go from "random ingredients" to "I know what to cook"—making the gap between inspiration and action as short as possible.
+
+This is a front-end-only first approach. Do not implement any back-end functionality.
+
+## 2. User Types and Permissions
+
+**All Users (Signed-In)**
+- Must create an account to use the app via Supabase Auth (email/password)
+- Can search unlimited recipes using their pantry or custom ingredient input
+- Access to full mock recipe catalog
+- Can save and manage their pantry (persists across sessions)
+- Can save unlimited favorite recipes
+- Can filter favorites by cookability based on current pantry
+- All saved data protected by Row Level Security
+
+**Permission Matrix**
+| Feature | Available |
+|---------|-----------|
+| Search recipes by ingredients | ✅ |
+| View recipe details | ✅ |
+| Autocomplete ingredients | ✅ |
+| Save and manage pantry | ✅ |
+| Save and manage favorites | ✅ |
+| Filter favorites by cookability | ✅ |
+
+## 3. Navigation and Information Architecture
+
+**Primary Navigation Structure: Sidebar (Desktop) / Bottom Nav (Mobile)**
+
+All signed-in users see:
+- Home / Search (ingredient input page)
+- My Pantry (saved ingredients management)
+- Favorites (saved recipes with cookability filters)
+- Account/Settings (sign out, preferences)
+
+**Route Hierarchy**
+```
+/ (root) - Landing Page (marketing, sign-in/sign-up CTAs)
+/search - Home/Search Page (ingredient input)
+/results - Recipe Results Page (ranked list)
+/recipe/:id - Recipe Detail Page (full recipe view)
+/pantry - Pantry Management Page
+/favorites - Favorites List Page
+/auth/signin - Sign In Page
+/auth/signup - Sign Up Page
+```
+
+**Navigation Patterns**
+- Persistent sidebar with quick access to all main features
+- All routes except `/`, `/auth/signin`, `/auth/signup` require authentication
+- Deep linking: All recipe detail pages are shareable URLs
+- Mobile: Sidebar collapses to bottom navigation bar (4 icons)
+
+## 4. Core User Flows
+
+### Flow 1: Recipe Discovery with Persistent Search
+**Entry Point:** Home/Search page (`/search`)
+
+**Steps:**
+1. User navigates to `/search` → Pantry auto-populated as chips
+2. User can temporarily remove/add ingredients for current search
+3. User clicks "Find Recipes" → Searches mock recipe database with ingredient IDs
+4. Navigates to `/results` → Displays ranked recipes by match percentage
+5. **User modifies ingredients directly on results page**
+   - Add ingredient → Chip appears, results refresh after 500ms
+   - Remove ingredient → Chip disappears, results refresh after 500ms
+   - URL updates with new ingredient IDs
+6. User clicks recipe card → Navigates to `/recipe/:id`
+7. User can save recipe → Heart icon, saves to favorites
+
+**Success State:** User iteratively refines search and finds a cookable recipe
+
+**Error Scenarios:**
+- No recipes found → "No recipes match these ingredients. Try removing one or adding alternatives."
+- Search failure → "Couldn't load recipes. Please try again." with retry
+- All ingredients removed → "Add at least one ingredient to search"
+
+---
+
+### Flow 2: Managing Pantry
+**Entry Point:** Sidebar → "My Pantry"
+
+**Steps:**
+1. User clicks "My Pantry" → Navigates to `/pantry`
+2. Page shows saved ingredients as chips
+3. User adds ingredient via autocomplete → Chip appears, saves to database
+4. User removes ingredient → Clicks X, removed from UI and database
+5. User clicks "Find Recipes with My Pantry" → Redirects to `/search`
+
+**Success State:** Pantry updated, user returns to search
+
+**Error Scenarios:**
+- Save fails → Revert chip, toast: "Couldn't save ingredient. Try again."
+- Delete fails → Restore chip, toast: "Couldn't remove ingredient. Try again."
+
+---
+
+### Flow 3: Filtering Favorites by Cookability
+**Entry Point:** Favorites page (`/favorites`)
+
+**Steps:**
+1. User clicks "Favorites" → Loads saved recipes
+2. Filter toggles display: "All" | "Cookable now" | "Missing 1" | "Missing 2+"
+3. System cross-references recipes with pantry → Calculates matches
+4. User clicks filter → List updates instantly (client-side)
+5. User can click recipe or unsave via heart icon
+
+**Success State:** User identifies cookable favorites
+
+**Error Scenarios:**
+- No matches for filter → "No favorites in this category. Try adding more to your pantry."
+
+## 5. Detailed Page Specifications
+
+### Page 1: Landing Page
+**Route:** `/`
+**Purpose:** Marketing page to convert visitors
+**User Access:** Unauthenticated users
+**Reference Design:** https://id-preview--f237d1d4-dc3a-421c-8e6f-9c567f33eda7.lovable.app/
+
+**Layout:**
+```
++--------------------------------------------------+
+| [Logo: Recipe Matcher]          [Sign In] [Sign Up] |
++--------------------------------------------------+
+|                                                  |
+|        What can you cook right now?              |
+|    Turn ingredients into delicious meals         |
+|         [Get Started]                            |
+|                                                  |
+|       [Hero Image/Illustration]                  |
++--------------------------------------------------+
+|              How It Works                        |
+|  +-------------+  +-------------+  +-------------+
+|  | [Icon: +]   |  | [Icon: ★]   |  | [Icon: ✓]   |
+|  | Add Your    |  | Get Instant |  | Cook What   |
+|  | Ingredients |  | Matches     |  | You Have    |
+|  | Build pantry|  | Recipes     |  | No wasted   |
+|  | once        |  | ranked      |  | ingredients |
+|  +-------------+  +-------------+  +-------------+
++--------------------------------------------------+
+|           Key Features                           |
+|  🥘 Smart Ingredient Matching                    |
+|  💾 Persistent Pantry                            |
+|  ❤️ Favorite Recipes                             |
+|  ✓ Know What You Have                            |
++--------------------------------------------------+
+|    Ready to discover what you can cook?          |
+|           [Get Started Now]                      |
++--------------------------------------------------+
+| [Logo] Recipe Matcher                            |
+| About | Contact | Privacy | Terms                |
++--------------------------------------------------+
+```
+
+**Primary Actions:**
+- Click "Get Started" (Hero) → `/auth/signup`
+- Click "Get Started Now" (Final CTA) → `/auth/signup`
+- Click "Sign Up" (Nav) → `/auth/signup`
+- Click "Sign In" (Nav) → `/auth/signin`
+
+**Design Notes:**
+- Warm gradient background (peach to cream)
+- Hero section with large headline and single CTA
+- Three-column "How It Works" section with icons
+- Four feature callouts with emoji/icons
+- Final CTA section with repeat signup button
+- Simple footer with links
+
+---
+
+### Page 2: Home / Search Page
+**Route:** `/search`
+**Purpose:** Primary recipe discovery interface
+**User Access:** Signed-in users only
+
+**Layout:**
+```
++--------------------------------------------------+
+| [Sidebar]  [Logo]                    [User Menu] |
+|  Search          What can you cook?              |
+|  Pantry    +--------------------------------+    |
+|  Favorites| [eggs] [x]  [milk] [x]  ...    |    |
+|  Account   | Type to add more...            |    |
+|            +--------------------------------+    |
+|                  [Find Recipes]                  |
++--------------------------------------------------+
+```
+
+**Primary Data:**
+- Pantry ingredients: Auto-populated as blue-tinted chips
+- Temporary ingredients: Gray chips (not saved)
+
+**User Actions:**
+- Add temporary ingredient via autocomplete
+- Remove ingredient temporarily (doesn't affect saved pantry)
+- Click "Find Recipes" → Navigate to `/results`
+
+---
+
+### Page 3: Recipe Results Page
+**Route:** `/results?ingredients=1123,11260,1053`
+**Purpose:** Display recipes ranked by match from mock database with persistent search
+**User Access:** Signed-in users only
+
+**Layout:**
+```
++--------------------------------------------------+
+| [Sidebar] [← Back to Search]                     |
+|  Search    Searching with:                       |
+|  Pantry    +--------------------------------+    |
+|  Favorites| [eggs] [x]  [mushrooms] [x]    |    |
+|  Account   | Type to add/remove...          |    |
+|            +--------------------------------+    |
+|                [Update Results]                  |
++--------------------------------------------------+
+|            24 recipes found                      |
+|  +----------------+  +----------------+           |
+|  | [Recipe Image] |  | [Recipe Image] |          |
+|  | Recipe Name    |  | Recipe Name    |          |
+|  | 5/6 match 83%  |  | 4/6 match 67%  |          |
+|  | Need: butter   |  | Need: garlic   |          |
+|  | 30min | 4 serv |  | 45min | 2 serv |          |
+|  | [♡ Save]       |  | [♡ Save]       |          |
+|  +----------------+  +----------------+           |
+|                 [Show More]                      |
++--------------------------------------------------+
+```
+
+**Primary Data:**
+- Active search ingredients: Displayed as editable chips (same as search page)
+- Recipe count: "X recipes found"
+- Recipe cards with: image, name, match badge, missing ingredients, stats, save button
+
+**User Actions:**
+- **Add ingredient via autocomplete** → Chip appears, auto-triggers new search
+- **Remove ingredient (click X)** → Chip removed, auto-triggers new search  
+- **Click "Update Results"** → Manual trigger to re-search (optional, if auto-search disabled)
+- Click recipe card → Navigate to `/recipe/:id`
+- Click heart → Save to favorites
+- Click "Show More" → Load 9 more recipes
+- Click "Back to Search" → Return to `/search` (preserves current ingredient selection)
+
+**Interaction Behavior:**
+- **Auto-search on change:** When user adds/removes ingredient, results refresh automatically after 500ms debounce
+- **Loading state:** Show skeleton cards while searching, keep ingredient bar interactive
+- **URL sync:** Update query params (`?ingredients=1123,11260`) on each search
+- **Preserve scroll:** When auto-searching, maintain scroll position if possible, or scroll to top smoothly
+- **Empty chips:** If all ingredients removed, show message: "Add at least one ingredient to search"
+
+**Design Notes:**
+- Ingredient search bar uses same styling as main search page (blue-tinted chips for pantry items, gray for temporary)
+- Search bar stays "sticky" at top when scrolling (desktop) or below fixed header (mobile)
+- Results count updates dynamically: "24 recipes found" → "18 recipes found"
+- Smooth transitions when results update (fade out/in, not jarring replacement)
+
+---
+
+### Page 4: Recipe Detail Page
+**Route:** `/recipe/:id`
+**Purpose:** Full recipe with ingredient ownership indicators
+**User Access:** Signed-in users only
+
+**Layout:**
+```
++--------------------------------------------------+
+| [← Back]  Recipe Name               [♡ Save]    |
++--------------------------------------------------+
+| [           Hero Recipe Image                  ] |
++--------------------------------------------------+
+| ✅ You have 5/6 ingredients                      |
+| Missing: butter                                  |
++--------------------------------------------------+
+| Ingredients:                                     |
+| ✓ 2 eggs                                         |
+| ✓ 200g mushrooms                                 |
+| ✗ 50g butter                                     |
++--------------------------------------------------+
+| Instructions:                                    |
+| 1. Heat butter in pan...                         |
+| 2. Add mushrooms and cook...                     |
++--------------------------------------------------+
+| Prep: 10min | Cook: 20min | Servings: 4          |
++--------------------------------------------------+
+```
+
+**Primary Data:**
+- Hero image, match status, ingredients with ✓/✗, instructions, stats
+
+**User Actions:**
+- Click back → Return to previous page
+- Click heart → Save/unsave from favorites
+
+---
+
+### Page 5: Pantry Management Page
+**Route:** `/pantry`
+**Purpose:** Manage saved pantry ingredients
+**User Access:** Signed-in users only
+
+**Layout:**
+```
++--------------------------------------------------+
+| [Sidebar]  My Pantry                 [User Menu] |
+|  Search    Your saved ingredients:               |
+|  Pantry    +--------------------------------+    |
+|  Favorites| [eggs] [x]  [milk] [x] ...     |    |
+|  Account   | Type to add more...            |    |
+|            +--------------------------------+    |
+|          [Find Recipes with My Pantry]           |
++--------------------------------------------------+
+```
+
+**Primary Actions:**
+- Add ingredient via autocomplete → Saves to database
+- Remove ingredient (click X) → Deletes from database
+- Click "Find Recipes" → Navigate to `/search`
+
+---
+
+### Page 6: Favorites Page
+**Route:** `/favorites`
+**Purpose:** View saved recipes with cookability filtering
+**User Access:** Signed-in users only
+
+**Layout:**
+```
++--------------------------------------------------+
+| [Sidebar]  My Favorites             [User Menu] |
+|  Search    [All] [Cookable] [Missing 1] [Miss 2+]|
+|  Pantry    +----------------+  +----------------+|
+|  Favorites| [Recipe Image] |  | [Recipe Image] ||
+|  Account   | Recipe Name    |  | Recipe Name    ||
+|            | ✅ Cookable!   |  | 🟡 Missing 1   ||
+|            | 30min | 4 serv |  | Need: butter   ||
+|            | [♥ Saved]      |  | [♥ Saved]      ||
+|            +----------------+  +----------------+|
++--------------------------------------------------+
+```
+
+**Primary Actions:**
+- Click filter toggle → Re-filter list (client-side)
+- Click recipe → Navigate to detail
+- Click heart → Remove from favorites
+
+---
+
+### Page 7: Sign In / Sign Up Pages
+**Routes:** `/auth/signin`, `/auth/signup`
+**Purpose:** Authentication
+**User Access:** Unauthenticated users only
+
+**Sign In Layout:**
+```
++--------------------------------------------------+
+| [← Back]  [Logo]                                 |
++--------------------------------------------------+
+|              Sign In                             |
+|     +--------------------------------+           |
+|     | Email                          |           |
+|     | Password                       |           |
+|     +--------------------------------+           |
+|          [Sign In Button]                        |
+|     Don't have an account? Sign up               |
++--------------------------------------------------+
+```
+
+**Sign Up adds:**
+- Confirm Password field
+- Password strength indicator
+- "Already have an account? Sign in" link
+
+**Primary Actions:**
+- Sign In: Authenticate → Redirect to `/search`
+- Sign Up: Create account → Redirect to `/search`
+
+## 6. Mock Data Strategy
+
+**Mock Data Files:**
+
+1. **mock-ingredients.ts** - 80-100 ingredients
+   ```typescript
+   { id: 1123, name: "egg", image: "egg.jpg" }
+   ```
+
+2. **mock-recipes.ts** - 40-50 recipes
+   ```typescript
+   {
+     id: 12345,
+     title: "Creamy Mushroom Omelette",
+     image: "https://example.com/...",
+     usedIngredients: [...],
+     missedIngredients: [...],
+     extendedIngredients: [...],
+     analyzedInstructions: [...],
+     readyInMinutes: 15,
+     servings: 2
+   }
+   ```
+
+3. **mock-user-pantry.ts** - 10-15 pantry staples
+4. **mock-favorites.ts** - 6-8 sample recipe IDs
+
+**Mock Service Functions:**
+```typescript
+mockAutocompleteIngredients(query: string): Promise<Ingredient[]>
+mockSearchRecipes(ingredientIds: number[]): Promise<Recipe[]>
+mockGetRecipeDetail(recipeId: number): Promise<Recipe>
+calculateMatchPercentage(recipeIngredients, userPantryIds): MatchResult
+mockGetPantry(userId: string): Promise<PantryItem[]>
+mockAddToPantry(userId: string, ingredientId: number): Promise<void>
+mockGetFavorites(userId: string): Promise<FavoriteRecipe[]>
+mockAddToFavorites(userId: string, recipeId: number): Promise<void>
+
+// Debounced search for results page
+const debouncedSearchRecipes = debounce((ingredientIds: number[]) => {
+  return mockSearchRecipes(ingredientIds);
+}, 500);
+```
+
+## 7. Interaction Patterns and Micro-interactions
+
+**Modal vs. New Page:**
+- No modals in MVP (focused page flows)
+- All auth flows use dedicated pages
+
+**Notifications/Toasts:**
+- Position: Bottom-right (desktop), bottom-center (mobile)
+- Duration: 3 seconds auto-dismiss
+- Types: Success (green), Error (red), Info with undo (blue)
+- Stack limit: Maximum 2 toasts
+
+**Loading Indicators:**
+- Skeleton screens: Recipe cards, ingredient chips
+- Inline spinners: Save buttons, form submissions
+- Timeout: 10 seconds with error + retry
+
+**Undo Actions:**
+- Remove from pantry/favorites: Toast with "Undo" button (3-second window)
+
+## 8. Edge Cases and Error Handling
+
+**Empty State Messaging:**
+- Search results: "No recipes match these ingredients. Try removing one or adding alternatives."
+- Pantry: "Your pantry is empty. Add ingredients: eggs, milk, butter..."
+- Favorites (none): "You haven't saved any recipes yet. Search and click the heart!"
+- Favorites (filter): "No favorites in this category. Try adding more to your pantry."
+- All ingredients removed on results page: "Add at least one ingredient to search"
+
+**Form Validation:**
+- Real-time validation on field blur
+- Inline errors below fields
+- Submit disabled until valid
+- Messages: "Enter a valid email", "Password must be 8+ characters", "Passwords don't match"
+
+**Error Messages:**
+- Search failures: "Couldn't load recipes. Please try again." with retry
+- Auth failures: "Invalid email or password"
+- Database failures: Revert UI, toast: "Couldn't save. Try again."
+- Network failures: "Check your internet connection."
+
+**Protected Routes:**
+- Unauthenticated accessing protected routes → Redirect to `/auth/signin`
+- Authenticated accessing landing/auth → Redirect to `/search`
+
+## 9. Performance and UX Considerations
+
+**Pagination:** "Show More" button (loads 9 recipes per click)
+
+**Lazy Loading:**
+- Recipe images: IntersectionObserver
+- Autocomplete: 300ms debounce
+- Recipe details: On-demand
+
+**Optimistic Updates:**
+- Add to favorites/pantry: Update UI immediately, revert on failure
+- Show undo toast for reversible actions
+
+**Caching:**
+- Ingredient list: LocalStorage (refresh daily)
+- Recipe details: SessionStorage (avoid refetch on back)
+- Autocomplete: Memory cache for session
+- No caching for search results
+
+**URL State Management:**
+- When ingredients change on `/results`, update URL params without full page reload
+- Use `router.replace()` instead of `router.push()` to avoid cluttering browser history
+- Parse URL params on page load to restore search state
+
+## 10. Implementation Checklist
+
+### Pages and Core Flows
+- [ ] Landing page with marketing and CTAs
+- [ ] Search page with pantry auto-population
+- [ ] Results page with match calculations
+- [ ] Persistent ingredient search bar on results page
+- [ ] Auto-search with 500ms debounce on ingredient changes
+- [ ] URL param sync for search state
+- [ ] Smooth loading states during re-search
+- [ ] Empty state when all ingredients removed
+- [ ] Recipe detail with ingredient indicators
+- [ ] Pantry management with CRUD
+- [ ] Favorites with cookability filters
+- [ ] Sign in/sign up pages
+
+### Components and Navigation
+- [ ] Sidebar navigation (desktop)
+- [ ] Bottom navigation (mobile)
+- [ ] Toast notification system
+- [ ] Auth state management
+- [ ] Protected route logic
+
+### Mock Data and Services
+- [ ] mock-ingredients.ts (80–100 items)
+- [ ] mock-recipes.ts (40–50 recipes)
+- [ ] mock-user-pantry.ts (10–15 items)
+- [ ] mock-favorites.ts (6–8 items)
+- [ ] All mock service functions
+- [ ] Match percentage calculator
+- [ ] Debounced search function for results page
+
+### Testing
+- [ ] Complete new user flow end-to-end
+- [ ] Pantry management flow
+- [ ] Favorites filtering
+- [ ] Persistent search on results page with auto-refresh
+- [ ] Sign-out and return user flow
+- [ ] All empty and error states
+- [ ] Mobile responsiveness
+- [ ] Optimistic updates with rollback
+- [ ] Protected route redirects
+```
+
