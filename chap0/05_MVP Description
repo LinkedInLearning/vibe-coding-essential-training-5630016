@@ -1,0 +1,39 @@
+## Problem
+
+You're standing in your kitchen with random ingredients and no idea what to cook. Searching recipe sites means scrolling through pages of things you're missing half the ingredients for.
+
+## Solution
+
+A simple web app where users type in ingredients they have on hand. The app instantly suggests recipes ranked by how well they match, so the best results use only what you've already got.
+
+## Core MVP Flow
+
+1. User lands on a clean home screen with a prominent ingredient input
+2. User adds ingredients one by one (tag-style input — type, hit enter, see pills)
+3. User hits "Find Recipes"
+4. App returns a list of recipe cards ranked by ingredient match percentage
+5. User clicks a card to see the full recipe (ingredients, steps, cook time, servings)
+
+## Key Data Displayed Per Recipe
+
+- Recipe title and image
+- Cook time and difficulty level
+- Ingredient match (e.g., "You have 5 of 7 ingredients")
+- Missing ingredients highlighted
+- Step-by-step instructions on detail view
+
+## Scope for MVP
+
+- No user accounts or authentication
+- No saving/favoriting (keep it stateless)
+- Recipe data from a static mock dataset (~30–50 recipes)
+- Single page feel — minimal navigation
+- Mobile-friendly and responsive
+
+## Out of Scope
+
+- User accounts, login, saved recipes
+- Grocery list generation
+- Dietary filters (can add post-MVP)
+- External API integration (start with mock data, swap later)
+
