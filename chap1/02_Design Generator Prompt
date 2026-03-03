@@ -1,0 +1,47 @@
+Analyze the current design of this project and create a complete Design System Specification document that I can add to my project's knowledge base.
+
+Include ALL of the following in exhaustive detail:
+
+1. **Theme Philosophy** — Describe the overall aesthetic in 12 sentences
+
+2. **Color Palette** — List every color token with:
+   - CSS variable name
+   - HSL value
+   - Hex equivalent
+   - Usage context (when to use each color)
+
+3. **Typography** — Include:
+   - Font families for headings and body
+   - Google Fonts import URL
+   - Font weights used
+   - Text sizes (mobile and desktop) with Tailwind classes
+
+4. **Border Radius** — Document:
+   - Base radius variable
+   - All radius sizes with values and Tailwind classes
+   - Common usage patterns for each
+
+5. **Shadows** — List all shadow variables with CSS values and use cases
+
+6. **Gradients** — All gradient definitions with CSS values
+
+7. **Button Specifications** — Include:
+   - Size variants (height, padding, classes)
+   - Style variants (colors, hover states, borders)
+   - Focus and disabled states
+
+8. **Card Specifications** — Base styles and enhanced variants
+
+9. **Input Specifications** — Height, borders, focus states
+
+10. **Badge/Tag Specifications** — Styles for pills and tags
+
+11. **Icon Containers** — Sizes and border radius patterns
+
+12. **Animations** — Keyframe definitions and usage
+
+13. **Spacing and Layout** — Container sizes, section padding, gap patterns
+
+14. **Hover and Interactive States** — All hover behaviors
+
+Format this as a clean, copy-paste ready document using markdown headers and code blocks where appropriate. Do NOT use emojis. Make it technical and precise so future prompts can reference it for consistency.
