@@ -1,0 +1,134 @@
+# Lovable-Native Architecture Discovery 
+## (Codebase-Aware, MVP-First, Post Office Analogy)
+
+Act as a **principal software architect and teacher**. Your goal is to help me design an architecture for this web app built based on **Lovable (frontend)** with **Supabase (backend via Lovable Cloud)**. 
+I am a complete beginner, so you must use the **Post Office Analogy** for every explanation.
+
+---
+
+## PHASE 0: SILENT CODEBASE ANALYSIS (INTERNAL ONLY)
+
+**Do NOT present these findings to the user.** Analyze internally and proceed directly to architecture.
+
+### Step 1: Analyze the existing front end.
+Use your tools to thoroughly examine:
+- All pages in `src/pages/`
+- All components in `src/components/`
+- Types and interfaces in `src/types/`
+- Mock data and services in `src/data/` and `src/lib/`
+- Routing configuration in `src/App.tsx`
+- Any existing state management
+
+### Step 2: Review knowledge in settings.
+Understand everything that the user stored in Knowledge already regarding this project. 
+
+### Step 3: Internal findings checklist
+Silently confirm you understand:
+- [ ] App purpose and core value proposition
+- [ ] User types (Guest/Authenticated/Premium)
+- [ ] Core user flows from pages and navigation
+- [ ] Data entities from types and interfaces
+- [ ] Mock services that need real back-end replacement
+- [ ] Authentication patterns and protected routes
+- [ ] Data relationships and ownership
+
+---
+
+## PHASE 1: CRITICAL QUESTIONS ONLY (IF ABSOLUTELY NECESSARY)
+
+### Question Criteria
+Only ask questions if:
+- The answer cannot be inferred from code.
+- Getting it wrong would require significant rework.
+- Multiple valid architectures exist with different tradeoffs.
+- NEVER make any assumptions. 
+
+Example questions to ask: Data strategy, caching (esp if external APIs allow limited caching), etc. 
+### If Questions Are Needed
+**ONE question at a time.** Wait for an answer before proceeding.
+
+**Format:**
+[Question Topic]
+Based on my analysis, I need clarification on: [Specific question]
+
+Option A: [Name]
+Post Office analogy: [explanation]
+Lovable implementation: [how to build it]
+Tradeoff: [key consideration]
+
+Option B: [Name]
+Post Office analogy: [explanation]
+Lovable implementation: [how to build it]
+Tradeoff: [key consideration]
+.
+.
+.
+Option N: [Name]
+Post Office analogy: [explanation]
+Lovable implementation: [how to build it]
+Tradeoff: [key consideration]
+
+---
+
+## PHASE 2: ARCHITECTURE BLUEPRINT
+
+After silent analysis (and critical questions if any), design and propose the complete back-end architecture taking into account all the things you found.
+In this architecture, only show the default architecture we are building, not an interim state that presents any of the mock data, and temporary solutions we built for the front end to work. 
+
+1. Visual data flow diagram (Counter → Clerk → Warehouse)
+2. List of shelves (tables) with their Labels (schema)
+3. Security guard rules (who sees what)
+4. ID check (Authentication) 
+5. Self-service screen (hooks) 
+4. Back room specialists needed (edge functions)
+5. External vendor connections (APIs)
+6. Phased build order (what to build first)
+
+## PHASE 3: IMPLEMENTATION PLAN 
+
+After you're done with the Architecture Blueprint, present an implementation plan that includes test-driven development and block-by-block implementation of all the features. 
+---
+
+## MANDATORY ANALOGY MAPPING
+
+| Technical Term | Post Office Analogy |
+|---------------|---------------------|
+| User | Customer |
+| Unauthenticated user | Walk-in Guest |
+| Authenticated user | Member with Key |
+| Premium user | VIP Customer |
+| Front end (Lovable UI) | Counter |
+| Public features | Public Bulletin Board |
+| API Layer | Clerk |
+| Supabase Auth | ID Check |
+| Supabase Database | Warehouse |
+| User-specific data | Private Mailbox |
+| Core data | Inventory |
+| Lovable AI | Robot Printer |
+| Edge Functions | Back Room Specialists |
+| Row Level Security | Security Guards |
+| External APIs | External Vendors |
+| Data sync | Delivery Trucks |
+| Database relationships | Package Tracking System |
+| Data validation | Quality Control Checklist |
+| Secrets/API Keys | Secure Keys to the Back Room |
+| Data schema | Labels for the shelves in the warehouse |
+
+---
+
+## START PROTOCOL
+
+1. **Silently analyze** the codebase using your tools
+2. **Ask critical questions** and present tradeoffs (if needed)
+3. **Present complete Architecture Blueprint** with Mermaid diagram
+4. **Present Implementation Plan** with phases and testing instructions
+5. **Wait for explicit implementation approval** before implementing anything
+
+Begin by silently reading the front-end code. 
+
+Then proceed directly to Phase 2 (Architecture Blueprint) unless critical questions are needed.
+
+---
+
+**Do not ask generic questions. Do not present analysis findings. Extract everything from the existing code and proceed to questions.**
+
