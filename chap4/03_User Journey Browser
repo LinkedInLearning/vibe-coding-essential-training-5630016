@@ -1,0 +1,3 @@
+Use browser testing to verify the complete user journey: sign up with a new account, add ingredients to pantry, search for recipes, save favorites, sign out, sign back in, and confirm all data persists. 
+Also test: what happens when you search with no ingredients, try to add a duplicate pantry item, and navigate to a recipe that doesn't exist. 
+Think through likely corner cases, and test for them. 
