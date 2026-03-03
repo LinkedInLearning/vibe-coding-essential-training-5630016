@@ -1,0 +1,51 @@
+# Recipe Matcher MVP — Knowledge Base
+
+## Project Overview
+**What:** An ingredient-first recipe matcher that ranks recipes by match quality, with pantry persistence and favorites for all signed-in users.
+**Who:** Home cooks who hate food waste and need cooking inspiration from random ingredients they already have.
+**Problem:** "I have stuff in my fridge but no idea what to cook right now."
+**Success:** Time from ingredient entry to clicking a recipe (speed = magic).
+
+---
+
+## Software Development Principles
+
+1. **Project Structure:** Maintain consistent file and folder organization. Group related code by feature or domain. Follow established patterns for hooks, components, utilities, and types. Keep separation of concerns clear between UI, business logic, and data layers.
+2. **Strict TypeScript:** Always use strict typing. Avoid 'any'. Ensure data structures are explicitly defined to prevent runtime errors.
+3. **Descriptive Naming:** Use clear, intent-based names for variables, functions, and components (examples: `isUserAuthenticated` instead of `auth`).
+4. **DRY Principle:** Do not repeat yourself. Centralize shared logic, types, and components. If a pattern is used more than twice, create a reusable utility or component.
+5. **Error Handling:** Always implement 'Unhappy Path' logic. Provide clear, user-friendly error messages and loading states for all asynchronous actions.
+6. **Security (Server-Side Logic):** Never trust the client. Sensitive logic, data validation, and API keys must remain on the server/back end.
+7. **Accessible Component Design:** Build using small, isolated UI components with proper accessibility. Use ARIA labels, semantic HTML, keyboard navigation support, and ensure WCAG AA compliance. Components should be reusable and follow standard naming conventions (Modals, Cards, Buttons).
+8. **Mobile-First Responsiveness:** All UI must be fully responsive and optimized for mobile devices before scaling to desktop.
+9. **Comprehensive Logging:** Always implement detailed logging by default to ensure observability and rapid debugging. Log edge function entry/exit with parameters, external API calls with request/response details, database operations, authentication events, and data transformations at key boundaries. Use structured logging with consistent formats.
+10. **Modular Architecture:** Structure all code (front end and back end) in a modular way so that individual features can be tested, debugged, and rolled back without affecting global state. Keep concerns separated and dependencies explicit.
+
+---
+
+## Workflow Constraint
+1. Build the front-end UI first. Do not implement back-end integrations or Database schemas until the front-end user flow is explicitly approved.
+2. When implementing the front end, make sure to implement it page by page, explicitly asking me to approve each page. 
+3. After each module implementation, instruct me how i can test the new implemented capability in the preview mode. Do not continue implementing the next module until I confirm I’m ready 
+
+---
+
+## North Star Feature
+**Priority #1:** Ingredient → Recipe Search (The Magic Moment)
+
+This is the anchor feature everything else supports. The entire UX flows from this:
+1. User adds ingredients (fast autocomplete)
+2. Hits "Let's cook something!" 
+3. Sees ranked results instantly (showing match percentages)
+4. Clicks recipe → sees what they have vs. need
+
+Everything else (pantry, favorites, onboarding) exists to make this faster on repeat visits. If search feels slow or confusing, the product fails. Optimize relentlessly for time-to-first-recipe-click.
+
+**Performance Target:** 
+- Autocomplete: <300ms
+- Recipe search: <1
+- Recipe details: <500ms
+
+
+
+
