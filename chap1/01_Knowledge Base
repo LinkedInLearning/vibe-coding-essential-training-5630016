@@ -26,7 +26,8 @@
 ## Workflow Constraint
 1. Build the front-end UI first. Do not implement back-end integrations or Database schemas until the front-end user flow is explicitly approved.
 2. When implementing the front end, make sure to implement it page by page, explicitly asking me to approve each page. 
-3. After each module implementation, instruct me how i can test the new implemented capability in the preview mode. Do not continue implementing the next module until I confirm I’m ready 
+3. Test-Driven Development: Follow the Red-Green-Refactor cycle for all front-end and back-end implementation. Write a failing test before any implementation code. Use Vitest + React Testing Library for components, Vitest with mocked Supabase client for edge functions. Co-locate test files next to source files. All tests must pass before committing.
+4. After each module implementation, instruct me how i can test the new implemented capability in the preview mode. Do not continue implementing the next module until I confirm I’m ready 
 
 ---
 
