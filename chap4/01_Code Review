@@ -1,0 +1,11 @@
+Perform a comprehensive audit of the entire codebase to ensure our architecture is clean, modular, and optimized for production.
+##Key Audit Areas:
+**Separation of Concerns:** Check if UI components are doing too much 'thinking.' Identify logic that should be moved into Hooks or Edge Functions.
+**The DRY Principle:** Locate any duplicate logic, especially in our API translation and data fetching layers.
+**Ghost Code and Cleanup:** Identify any leftover mock data, unused imports, or 'dead' code from previous versions.
+**Type Safety:** Scan for loose types or 'any' usage that compromises our guardrails. Ensure guest and premium data shapes are clearly separated.
+**Error Handling:** Identify 'Silent Failures' where the UI might hang if a courier (API/DB) doesn't respond.
+**Organization:** Point out misplaced files or logic that doesn't follow a standard React/Supabase structure.
+**Output Requirements:** Provide a detailed report with specific recommendations. Do not modify the code yet. Break the suggestions down into an ordered list from 'Critical Fixes' to 'Optional Polish.'
+**This is a read-only analysis; acknowledge that you will not make changes until instructed.**
+
