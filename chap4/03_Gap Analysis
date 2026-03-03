@@ -1,0 +1,3 @@
+Review the full front end and edge function test suites. List all the features and behaviours that currently have test coverage, and identify what's missing. 
+Focus on: unhappy paths we haven't tested (network failures, timeouts, malformed data), edge cases (empty inputs, extremely long inputs, duplicate submissions), error handling (what does the user see when something fails?), and boundary conditions (rate limits, large result sets, expired sessions). 
+Present the gaps as a prioritised list—critical gaps first. 
