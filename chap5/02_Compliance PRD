@@ -1,0 +1,188 @@
+# Compliance PRD: Settings and Data Management Page
+
+## Overview
+Add a Settings page that gives authenticated users full control over their personal data, in compliance with GDPR and CCPA requirements. Add legal pages (Privacy Policy, Terms of Service, Cookie Policy) accessible from the app footer, and a cookie consent popup for first-time visitors.
+
+## User Flow
+
+### Accessing Settings
+1. User clicks their profile icon or name in the top navigation bar,
+2. A dropdown menu appears with two options: **Settings** and **Sign Out**,
+3. User clicks **Settings** → navigates to the Settings page,
+
+### Accessing Legal Pages
+1. Footer is visible on every page of the app,
+2. Footer contains three links: **Privacy Policy**, **Terms of Service**, **Cookie Policy**,
+3. Each link opens the respective legal page,
+
+---
+
+## Page Layout: Settings
+
+### Section 1: Personal Information
+Displays all personal data the app stores for the authenticated user.
+
+```
++-------------------------------+
+|  Settings                     |
+|                               |
+|  PERSONAL INFORMATION         |
+|  +-------------------------+  |
+|  | Name:  [Jane Doe  ] Edit|  |
+|  | Email: [jane@... ] Edit |  |
+|  +-------------------------+  |
+|                               |
+|  [ Save Changes ]             |
++-------------------------------+
+```
+
+**Behavior:**
+- Fields are read-only by default,
+- Clicking "Edit" or the field makes it editable,
+- "Save Changes" appears only when a field has been modified,
+- On success → toast: "Profile updated successfully",
+- On error → toast: "Failed to update profile. Please try again."
+
+### Section 2: Delete Account
+
+```
++-------------------------------+
+|  - - - - - - - - - - - - -   |
+|                               |
+|  DANGER ZONE                  |
+|                               |
+|  Permanently delete your      |
+|  account and all data.        |
+|  This cannot be undone.       |
+|                               |
+|  [ Delete My Account ]  (red) |
++-------------------------------+
+```
+
+**Behavior:**
+- "Delete My Account" is styled in red to signal destructive action,
+- Clicking it opens a confirmation dialog (see below),
+
+### Confirmation Dialog: Delete Account
+
+```
++-------------------------------+
+|                               |
+|  ! Are you sure?              |
+|                               |
+|  This will permanently        |
+|  delete your account and      |
+|  all your data, including:    |
+|                               |
+|  - Your saved pantry items    |
+|  - Your favorite recipes     |
+|  - Your profile information   |
+|                               |
+|  This cannot be undone.       |
+|                               |
+|  Type "DELETE" to confirm:    |
+|  +-------------------------+  |
+|  |                         |  |
+|  +-------------------------+  |
+|                               |
+|  [Cancel]  [Delete Everything]|
++-------------------------------+
+```
+
+**Behavior:**
+- User must type "DELETE" to enable the "Delete Everything" button,
+- Button is disabled and greyed out until confirmation word is typed,
+- On confirmation → delete all user data → sign user out → redirect to landing page,
+- Toast on landing page: "Your account and all data have been permanently deleted",
+- "Cancel" closes the dialog with no changes,
+
+---
+
+## Page Layout: Legal Pages
+
+Each legal page uses a simple, readable layout:
+
+```
++-------------------------------+
+|  < Back                       |
+|                               |
+|  Privacy Policy               |
+|  Last updated: [date]         |
+|                               |
+|  [Content from Termly or      |
+|   Iubenda goes here]          |
+|                               |
++-------------------------------+
+```
+
+**Note:** The actual legal content should be generated using a service like Termly (termly.io) or iubenda (iubenda.com). This PRD defines the page layout and navigation only — not the legal text itself.
+
+---
+
+## Cookie Consent Popup
+
+Shown once to first-time visitors at the bottom of the screen:
+
+```
++-------------------------------+
+| We use cookies to keep you    |
+| logged in and improve your    |
+| experience.                   |
+| Read our Cookie Policy.       |
+|                               |
+|      [Accept]  [Decline]      |
++-------------------------------+
+```
+
+**Behavior:**
+- Appears on first visit, pinned to the bottom of the viewport.
+- "Accept" → stores consent, popup disappears, does not show again.
+- "Decline" → stores refusal, popup disappears, does not show again.
+- "Cookie Policy" links to the Cookie Policy legal page.
+- User's choice is stored locally so the popup doesn't reappear.
+
+---
+
+## Footer (All Pages)
+
+```
+---------------------------------
+Privacy Policy | Terms | Cookies
+---------------------------------
+```
+
+Added to the bottom of every page. Each link opens the respective legal page.
+
+---
+
+## Edge Cases
+
+| Scenario | Expected Behavior |
+|---|---|
+| User tries to save an empty name field | Validation error: "Name cannot be empty" |
+| User tries to change email to invalid format | Validation error: "Please enter a valid email address" |
+| User types "delete" (lowercase) in confirmation | Button stays disabled — must be exactly "DELETE" |
+| User deletes account, then tries to sign in again | Standard "Invalid credentials" message — no indication the account existed |
+| Network error during profile update | Toast: "Failed to update profile. Please try again." |
+| Network error during account deletion | Toast: "Failed to delete account. Please try again." — account remains intact |
+| Unauthenticated user navigates to /settings | Redirect to sign-in page |
+
+---
+
+## Data Deleted on Account Removal
+
+When a user deletes their account, the following data must be permanently removed:
+
+- **profiles** table → user's row
+- **pantry_items** table → all rows matching user's ID
+- **favorites** table → all rows matching user's ID
+- **Supabase Auth** → user's authentication record
+
+This is handled by the CASCADE DELETE policies already configured in our database schema.
+
+---
+
+## Design
+Follow the existing design system defined in the project Knowledge file. The Settings page should match the style and feel of all other pages in the app. The "Danger Zone" section should use red/warning styling to clearly distinguish destructive actions from normal ones.
+
+
