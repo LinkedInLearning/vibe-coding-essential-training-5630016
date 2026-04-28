@@ -1,48 +1,23 @@
-# Vibe Coding Essential Training: Learn to Code in the Age of AI
-This is the repository for the LinkedIn Learning course `Vibe Coding Essential Training: Learn to Code in the Age of AI`. The full course is available from [LinkedIn Learning][lil-course-url].
+# Vibe Coding from Scratch: A Beginner's Guide to Building and Shipping an App with AI
+This is the repository for the LinkedIn Learning course `Vibe Coding from Scratch: A Beginner's Guide to Building and Shipping an App with AI`. The full course is available from [LinkedIn Learning][lil-course-url].
 
 ![lil-thumbnail-url]
 
 ## Course Description
 
-_See the readme file in the main branch for updated instructions and information._
-## Instructions
-This repository has branches for each of the videos in the course. You can use the branch pop up menu in github to switch to a specific branch and take a look at the course at that stage, or you can add `/tree/BRANCH_NAME` to the URL to go to the branch you want to access.
-
-## Branches
-The branches are structured to correspond to the videos in the course. The naming convention is `CHAPTER#_MOVIE#`. As an example, the branch named `02_03` corresponds to the second chapter and the third video in that chapter. 
-Some branches will have a beginning and an end state. These are marked with the letters `b` for "beginning" and `e` for "end". The `b` branch contains the code as it is at the beginning of the movie. The `e` branch contains the code as it is at the end of the movie. The `main` branch holds the final state of the code when in the course.
-
-When switching from one exercise files branch to the next after making changes to the files, you may get a message like this:
-
-    error: Your local changes to the following files would be overwritten by checkout:        [files]
-    Please commit your changes or stash them before you switch branches.
-    Aborting
-
-To resolve this issue:
-	
-    Add changes to git using this command: git add .
-	Commit changes using this command: git commit -m "some message"
-
-## Installing
-1. To use these exercise files, you must have the following installed:
-	- [list of requirements for course]
-2. Clone this repository into your local machine using the terminal (Mac), CMD (Windows), or a GUI tool like SourceTree.
-3. [Course-specific instructions]
+You don't need to know how to code to build a real web application—you just need the right approach. In this course, you'll go from zero to a fully deployed app by describing what you want in plain language and letting AI do the heavy lifting. You'll learn to create polished user interfaces, build functional backends, and connect everything together. Along the way, you'll pick up essential software development skills like planning, testing, code reviews, and security assessments, giving you the confidence to build apps that work. You'll also get hands-on practice creating architecture blueprints and implementation plans tailored to your app ideas. Whether you're an entrepreneur with an idea, a product manager who wants to prototype, or simply curious about what's possible with AI, this course gives you a repeatable process to turn ideas into live, working applications. No prior programming experience is required.
 
 ## Instructor
 
-Instructor name
+Basia Kubicka
 
-Instructor description
-
-                            
+AI Product Manager | AI Agents | Rapid Prototyping | Vibe Coding           
 
 Check out my other courses on [LinkedIn Learning](https://www.linkedin.com/learning/instructors/).
 
 
 [0]: # (Replace these placeholder URLs with actual course URLs)
 
-[lil-course-url]: https://www.linkedin.com/learning/
-[lil-thumbnail-url]: https://media.licdn.com/dms/image/v2/D4E0DAQG0eDHsyOSqTA/learning-public-crop_675_1200/B4EZVdqqdwHUAY-/0/1741033220778?e=2147483647&v=beta&t=FxUDo6FA8W8CiFROwqfZKL_mzQhYx9loYLfjN-LNjgA
+[lil-course-url]: https://www.linkedin.com/learning/vibe-coding-from-scratch-a-beginner-s-guide-to-building-and-shipping-an-app-with-ai
+[lil-thumbnail-url]: https://media.licdn.com/dms/image/v2/D4E0DAQHeT_9Ts3f2dg/learning-public-crop_675_1200/B4EZzU3FUvIsAY-/0/1773097735831?e=2147483647&v=beta&t=7gYzpx8u3_g4J9CDw1yMd5mHvSd4O2kzxamq3LiJbWk
 
